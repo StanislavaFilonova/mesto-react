@@ -1,39 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Header from './Header.js';
+import Main from './Main.js'
+import Footer from './Footer.js';
+import ImagePopup from './ImagePopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
 
 function App() {
+  //Создаем хуки, управляющие внутренним состоянием.
+  const [isEditAvatarPopupOpen, onEditAvatarPopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, onEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, onAddPlacePopupOpen] = React.useState(false);
+
+  //Создание обработчика события, который изменяет внутренне состояние 
+  function handleEditAvatarClick() {
+    onEditAvatarPopupOpen(true);
+  }
+  function handleEditProfileClick() {
+    onEditProfilePopupOpen(true);
+  }
+  function handleAddPlaceClick() {
+    onAddPlacePopupOpen(true);
+  }
   return (
     <div className="App">
     <div className="page">
-      <header className="header">
-        <img
-          src="./images/Vector.svg"
-          alt="Логотип сервиса"
-          className="header__logo"
-        />
-      </header>
-      <main className="content">
-        <section className="profile">
-          <button className="profile__button">
-            <img
-            className="profile__avatar"
-            src="#"
-            alt="Аватарка пользователя"
-          />
-          </button>
-          <div className="profile__info">
-            <h1 className="profile__user-name"></h1>
-            <button className="profile__edit-button" type="button"></button>
-            <p className="profile__occupation"></p>
-          </div>
-          <button className="profile__add-button" type="button"></button>
-        </section>
+    <Header/>
+    <Main
+      onEditAvatar={handleEditAvatarClick}
+      onEditProfile={handleEditProfileClick}
+      onAddPlace={handleAddPlaceClick}
+    />
+    <Footer/>
+    <AddPlacePopup/>
+    <ImagePopup/>
 
-        <section className="elements"></section>
-      </main>
-      <footer className="footer">
-        <p className="footer__author">©&nbsp;2022&nbsp;Mesto&nbsp;Russia</p>
-      </footer>
+
     </div>
 
     <div className="popup popup_type_profile">
@@ -84,46 +85,6 @@ function App() {
       </div>
     </div>
 
-    <div className="popup popup_type_new-card">
-      <div className="popup__wrapper">
-        <button
-          className="popup__close popup__close_type_card"
-          type="button"
-        ></button>
-        <form
-          className="popup__form popup__form_type_card"
-          name="cardPopupForm"
-          novalidate
-        >
-          <h2 className="popup__title">Новое место</h2>
-          <input
-            id="placename-input"
-            type="text"
-            className="popup__input popup__input_type_placename"
-            name="name"
-            placeholder="Название"
-            minlength="2"
-            maxlength="30"
-            autocomplete="off"
-            required
-          />
-          <span
-            id="placename-input-error"
-            className="popup__input-error popup__input-error_active"
-          ></span>
-          <input
-            id="imageLink-input"
-            type="url"
-            className="popup__input popup__input_type_imagelink"
-            name="link"
-            placeholder="Ссылка на картинку"
-            autocomplete="off"
-            required
-          />
-          <span
-            id="imageLink-input-error"
-            className="popup__input-error popup__input-error_active"
-          ></span>
           <button
             className="popup__save popup__save_inactive"
             type="submit"
@@ -131,24 +92,6 @@ function App() {
           >
             Создать
           </button>
-        </form>
-      </div>
-    </div>
-
-    <div className="popup popup_type_image">
-      <div className="popup__wrapper popup__wrapper_type_image">
-        <button
-          className="popup__close popup__close_type_image"
-          type="button"
-        ></button>
-        <img
-          className="popup__image"
-          src="#"
-          alt="Фотография достопримечательности"
-        />
-        <p className="popup__caption"></p>
-      </div>
-    </div>
 
     <div className="popup popup_type_delete-card">
       <div className="popup__wrapper">
