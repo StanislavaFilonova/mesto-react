@@ -6,7 +6,7 @@ function PopupWithForm(props) {
     return(
         <div className={`popup popup_type_${props.name} ${openClass}`} >
             <div className="popup__wrapper">
-                <button className={`popup__close popup__close_type_${props.name}`} type="button"></button>
+                <button className={`popup__close popup__close_${props.name}`} type="button" onClick={props.onClose}></button>
                 <form className={`popup__form  popup__form_type_${props.name}`} name={`${props.name}`} novalidate>
                     <h2 className="popup__title">{props.title}</h2>
 

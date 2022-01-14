@@ -4,6 +4,7 @@ import Main from './Main.js'
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 
 function App() {
   //Создаем хуки, управляющие внутренним состоянием.
@@ -15,11 +16,20 @@ function App() {
   function handleEditAvatarClick() {
     onEditAvatarPopupOpen(true);
   }
+
   function handleEditProfileClick() {
     onEditProfilePopupOpen(true);
   }
+
   function handleAddPlaceClick() {
     onAddPlacePopupOpen(true);
+  }
+
+  //Функция закрытия всех попапов
+  function closeAllPopups() {
+    onEditAvatarPopupOpen(false);
+    onEditProfilePopupOpen(false);
+    onAddPlacePopupOpen(false);
   }
   return (
     <div className="App">
@@ -31,8 +41,16 @@ function App() {
       onAddPlace={handleAddPlaceClick}
     />
     <Footer/>
-    <AddPlacePopup/>
-    <ImagePopup/>
+    <AddPlacePopup
+      isOpen={isAddPlacePopupOpen}
+      onClose={closeAllPopups}
+      />
+    <EditAvatarPopup
+      isOpen={isEditAvatarPopupOpen}
+      onClose={closeAllPopups}
+      />
+    <ImagePopup
+      onClose={closeAllPopups}/>
 
 
     </div>
@@ -105,35 +123,6 @@ function App() {
         >
           <h2 className="popup__title">Вы уверены?</h2>
           <button type="submit" className="popup__save">Да</button>
-        </form>
-      </div>
-    </div>
-
-    <div className="popup popup_type_avatar">
-      <div className="popup__wrapper">
-        <button
-          className="popup__close popup__close_delete-card"
-          type="button"
-        ></button>
-        <form
-          className="popup__form popup__form_type_avatar"
-          name="avatarPopup"
-          novalidate
-        >
-          <h2 className="popup__title">Обновить аватар</h2>
-          <input
-            id="avatar-input"
-            type="url"
-            className="popup__input popup__input_type_avatar"
-            name="avatar"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span
-            id="avatar-input-error"
-            className="popup__input-error popup__input-error_active"
-          ></span>
-          <button type="submit" className="popup__save popup__save_inactive" disabled="true">Сохранить</button>
         </form>
       </div>
     </div>
