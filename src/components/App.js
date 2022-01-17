@@ -127,19 +127,6 @@ function App() {
       </div>
     </div>
 
-    <template className="element__template">
-      <li className="element">
-        <img className="element__photo" src="#" alt="Фотография места" />
-        <div className="element__info">
-          <h2 className="element__name"></h2>
-            <div className="element__rate">
-              <button className="element__like" type="button"></button>
-              <h3 className="element__number"></h3>
-            </div>
-          <button className="element__delete" type="button"></button>
-        </div>
-      </li>
-    </template>
     </div>
   );
 }

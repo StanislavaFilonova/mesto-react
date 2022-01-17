@@ -1,4 +1,4 @@
-.element {
+.card {
   background-color: #fff;
   width: 282px;
   border-radius: 10px;
@@ -8,12 +8,12 @@
   list-style-type: none;
 }
 
-.element:last-of-type {
+.card:last-of-type {
   margin-bottom: 0;
 }
 
 @media (min-width: 768px) {
-  .element {
+  .card {
     margin-bottom: 0;
   }
 }
