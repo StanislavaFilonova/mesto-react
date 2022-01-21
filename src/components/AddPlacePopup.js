@@ -14,6 +14,7 @@ function AddPlacePopup(props) {
         setCardLink(evt.target.value);
     }
 
+    // Используем хук эффект, ктр. вызывает функцию
     React.useEffect(() => {
         setCardName('');
         setCardLink('');
@@ -32,39 +33,39 @@ function AddPlacePopup(props) {
     return (
 
         <PopupWithForm
-          name="cardPopupForm"
+          name="card"
           title="Новое место"
-          button="add"
+          button="card"
           buttonSubmitText={props.buttonSubmitText}
           isOpen={props.isOpen}
           onClose={props.onClose}
           onSubmit={handleSubmit}
         >
-              <input 
-                  type="text" 
-                  className="popup__input popup__input_type_placename"
-                  id="placename-input"
-                  name="name" 
-                  required
-                  minLength="2"
-                  maxLength="30"
-                  autoComplete="off"
-                  placeholder="Название"
-                  value={cardName}
-                  onChange={handleChangeCardName}
-                />
+            <input 
+                type="text" 
+                className="popup__input popup__input_type_placename"
+                id="placename-input"
+                name="name" 
+                required
+                minLength="2"
+                maxLength="30"
+                autoComplete="off"
+                placeholder="Название"
+                value={cardName}
+                onChange={handleChangeCardName}
+            />
               <span id="placename-input-error" className="popup__input-error popup__input-error_active"></span> 
               <input 
-                  type="url" 
-                  className="popup__input popup__input_type_imagelink"
-                  id="imageLink-input"
-                  name="link" 
-                  required
-                  autoComplete="off"
-                  placeholder="Ссылка на картинку"
-                  value={cardLink}
-                  onChange={handleChangeCardLink}
-                />
+                type="url" 
+                className="popup__input popup__input_type_imagelink"
+                id="imageLink-input"
+                name="link" 
+                required
+                autoComplete="off"
+                placeholder="Ссылка на картинку"
+                value={cardLink}
+                onChange={handleChangeCardLink}
+              />
               <span id="imageLink-input-error" className="popup__input-error popup__input-error_active"></span>
         </PopupWithForm>
     )

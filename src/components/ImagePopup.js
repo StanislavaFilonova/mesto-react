@@ -1,6 +1,7 @@
 import React from 'react';
 
 function ImagePopup({card, onClose}) {
+  console.log(card);
     return(
         <div className={`popup popup_type_image ${card.link ? "popup_opened" : "" }`}>
         <div className="popup__wrapper popup__wrapper_type_image">

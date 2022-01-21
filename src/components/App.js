@@ -3,14 +3,38 @@ import Header from './Header.js';
 import Main from './Main.js'
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
-import AddPlacePopup from './AddPlacePopup.js';
+import api from '../utils/Api';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditAvatarPopup from './EditAvatarPopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
+import DeleteCardPopup from './DeleteCardPopup.js';
+import EditProfilePopup from './EditProfilePopup.js';
+import Avatar from '../images/Avatar.png'
+
 
 function App() {
   //Создаем хуки, управляющие внутренним состоянием.
   const [isEditAvatarPopupOpen, onEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, onEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, onAddPlacePopupOpen] = React.useState(false);
+  const [isDeleteCardPopup, onDeleteCardPopup] = React.useState(false);
+
+  const [selectedCard, setSelectedCard] = React.useState({link: '', name: ''});
+  const [currentUser, setCurrentUser] = React.useState({
+    _id: 0, 
+    name: 'Станислава',
+    about: 'Frontend Developer',
+    avatar: Avatar,
+  });
+
+  const [cards, setCards] = React.useState([]);
+  const [cardDelete, setCardDelete] = React.useState({});
+
+  const [profilePopupButtonText, setProfilePopupButtonText] = React.useState('Сохранить');
+  const [avatarPopupButtonText, setAvatarPopupButtonText] = React.useState('Сохранить');
+  const [placePopupButtonText, setPlacePopupButtonText] = React.useState('Создать');
+  const [removePopupButtonText, setRemovePopupButtonText] = React.useState('Да');
+
 
   //Создание обработчика события, который изменяет внутренне состояние 
   function handleEditAvatarClick() {
@@ -25,15 +49,77 @@ function App() {
     onAddPlacePopupOpen(true);
   }
 
+  function handleCardClick(card) {
+    setSelectedCard(card);
+  }
+
+  function handleCardDeleteClick(card) {
+    onDeleteCardPopup(true);
+    setCardDelete(card);
+  }
+
   //Функция закрытия всех попапов
   function closeAllPopups() {
     onEditAvatarPopupOpen(false);
     onEditProfilePopupOpen(false);
     onAddPlacePopupOpen(false);
+    onDeleteCardPopup(false);
+    setCardDelete({link: '',  name: ''});
+    setSelectedCard({link: '',  name: ''});
+  }
+
+
+// Настраиваем хук, который устанавливает колбэки. Функция будет вызвана после того, как будут внесены все изменения в DOM.
+// Функция, которая отвечает за закрытие попапов по клику вне формы
+  React.useEffect(() => {
+    function handleOverlayClick(evt) {
+      if (evt.target === evt.currentTarget){
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('mousedown', handleOverlayClick);
+
+    return() => {
+      document.removeEventListener('mousedown', handleOverlayClick);
+    }
+  }, 
+  // колбэк-очистка
+  []);
+
+  // Функция, которая отвечает за закрытие попапа нажатием кнопки "escape"
+  React.useEffect(() => {
+    function handleEscapeClick(evt) {
+      if (evt.key === "Escape") {
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('keyup', handleEscapeClick);
+
+    return() => {
+      document.removeEventListener('keyup', handleEscapeClick);
+    }
+  }, [])
+
+  React.useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getCards()])
+      .then(([userData, cards]) => {
+        setCurrentUser(userData);
+        setCards(cards)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+  }, [])
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+
+    //api
   }
   return (
-    <div className="App">
     <div className="page">
+    <CurrentUserContext.Provider value={currentUser}> {/*текущее значение контекста из ближайшего подходящего Provider выше в дереве компонентов.*/}
     <Header/>
     <Main
       onEditAvatar={handleEditAvatarClick}
@@ -50,84 +136,10 @@ function App() {
       onClose={closeAllPopups}
       />
     <ImagePopup
+      card={selectedCard}
       onClose={closeAllPopups}/>
-
-
-    </div>
-
-    <div className="popup popup_type_profile">
-      <div className="popup__wrapper">
-        <button
-          className="popup__close popup__close_type_profile"
-          type="button"
-        ></button>
-        <form
-          className="popup__form popup__form_type_profile"
-          name="profilePopupForm"
-          novalidate
-        >
-          <h2 className="popup__title">Редактировать профиль</h2>
-          <input
-            id="name-input"
-            type="text"
-            className="popup__input popup__input_type_name"
-            name="name"
-            placeholder="Ваше имя"
-            minlength="2"
-            maxlength="40"
-            required
-          />
-          <span id="name-input-error" className="popup__input-error"></span>
-          <input
-            id="occupation-input"
-            type="text"
-            className="popup__input popup__input_type_occupation"
-            name="occupation"
-            placeholder="Ваша профессия"
-            minlength="2"
-            maxlength="200"
-            required
-          />
-          <span
-            id="occupation-input-error"
-            className="popup__input-error popup__input-error_active"
-          ></span>
-          <button
-            className="popup__save popup__save_inactive"
-            type="submit"
-            disabled
-          >
-            Сохранить
-          </button>
-        </form>
+      </CurrentUserContext.Provider>
       </div>
-    </div>
-
-          <button
-            className="popup__save popup__save_inactive"
-            type="submit"
-            disabled
-          >
-            Создать
-          </button>
-
-    <div className="popup popup_type_delete-card">
-      <div className="popup__wrapper">
-        <button
-          className="popup__close popup__close_delete-card"
-          type="button"
-        ></button>
-        <form
-          className="popup__form popup__form_type_delete-card"
-          name="cardPopupDelete"
-        >
-          <h2 className="popup__title">Вы уверены?</h2>
-          <button type="submit" className="popup__save">Да</button>
-        </form>
-      </div>
-    </div>
-
-    </div>
   );
 }
 

@@ -16,15 +16,15 @@
 @import url(./blocks/profile/__add-button/profile__add-button.css);
 
 @import url(./blocks/elements/elements.css);
-@import url(./blocks/element/element.css);
-@import url(./blocks/element/__photo/element__photo.css);
-@import url(./blocks/element/__info/element__info.css);
-@import url(./blocks/element/__name/element__name.css);
-@import url(./blocks/element/__rate/element__rate.css);
-@import url(./blocks/element/__number/element__number.css);
-@import url(./blocks/element/__like/element__like.css);
-@import url(./blocks/element/__like/_active/element__like_active.css);
-@import url(./blocks/element/__delete/element__delete.css);
+@import url(./blocks/card/card.css);
+@import url(./blocks/card/__photo/card__photo.css);
+@import url(./blocks/card/__info/card__info.css);
+@import url(./blocks/card/__name/card__name.css);
+@import url(./blocks/card/__rate/card__rate.css);
+@import url(./blocks/card/__number/card__number.css);
+@import url(./blocks/card/__like/card__like.css);
+@import url(./blocks/card/__like/_active/card__like_active.css);
+@import url(./blocks/card/__delete/card__delete.css);
 
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__author/footer__author.css);
