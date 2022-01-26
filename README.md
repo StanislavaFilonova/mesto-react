@@ -14,14 +14,14 @@
 
 ## Используемые технологии
 
-HTML5
-CSS3
-Grid Layout
-CSS БЭМ Nested
-Семантические теги
-Адаптивная верстка
-JavaScript
-React
+* HTML5
+* CSS3
+* Grid Layout
+* CSS БЭМ Nested
+* Семантические теги
+* Адаптивная верстка
+* JavaScript
+* React
 
 ## Доступные скрипты
 
