@@ -4,7 +4,7 @@
 
 ## Проект № 10
 
-Выполнен частичный перенос интерфейса сервиса "Mesto" (<https://stanislavafilonova.github.io/mesto/>) на React:
+Выполнен частичный перенос интерфейса сервиса "Mesto" <https://stanislavafilonova.github.io/mesto/> на React:
 
 * Выполнен перенос разметки. Разметка страницы создается с ипользованием JSX;
 * Реализовано чтение данных с сервера и вывод на экран.
@@ -14,14 +14,14 @@
 
 ## Используемые технологии
 
-HTML5
-CSS3
-Grid Layout
-CSS БЭМ Nested
-Семантические теги
-Адаптивная верстка
-JavaScript
-React
+* HTML5
+* CSS3
+* Grid Layout
+* CSS БЭМ Nested
+* Семантические теги
+* Адаптивная верстка
+* JavaScript
+* React
 
 ## Доступные скрипты
 
