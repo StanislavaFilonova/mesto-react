@@ -1,8 +1,9 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup(props) {
+//---------------------------------------------------------------------------------------------------------------------
 
+function AddPlacePopup(props) {
     const [cardName, setCardName] = React.useState('');
     const [cardLink, setCardLink] = React.useState('');
 
@@ -14,12 +15,6 @@ function AddPlacePopup(props) {
         setCardLink(evt.target.value);
     }
 
-    // Используем хук эффект, ктр. вызывает функцию
-    React.useEffect(() => {
-        setCardName('');
-        setCardLink('');
-    }, [props.isOpen]);
-
     function handleSubmit(evt) {
         evt.preventDefault();
 
@@ -29,17 +24,24 @@ function AddPlacePopup(props) {
         });
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
 
-    return (
+    // Используем хук эффект, ктр. вызывает функцию
+    React.useEffect(() => {
+        setCardName('');
+        setCardLink('');
+    }, [props.isOpen]);
 
+    //---------------------------------------------------------------------------------------------------------------------
+    return(
         <PopupWithForm
-          name="card"
-          title="Новое место"
-          button="card"
-          buttonSubmitText={props.buttonSubmitText}
-          isOpen={props.isOpen}
-          onClose={props.onClose}
-          onSubmit={handleSubmit}
+            name="card"
+            title="Новое место"
+            button="card"
+            buttonSubmitText={props.buttonSubmitText}
+            isOpen={props.isOpen}
+            onClose={props.onClose}
+            onSubmit={handleSubmit}
         >
             <input 
                 type="text" 
@@ -54,8 +56,8 @@ function AddPlacePopup(props) {
                 value={cardName}
                 onChange={handleChangeCardName}
             />
-              <span id="placename-input-error" className="popup__input-error popup__input-error_active"></span> 
-              <input 
+            <span id="placename-input-error" className="popup__input-error popup__input-error_active"></span> 
+            <input 
                 type="url" 
                 className="popup__input popup__input_type_imagelink"
                 id="imageLink-input"
@@ -65,8 +67,8 @@ function AddPlacePopup(props) {
                 placeholder="Ссылка на картинку"
                 value={cardLink}
                 onChange={handleChangeCardLink}
-              />
-              <span id="imageLink-input-error" className="popup__input-error popup__input-error_active"></span>
+            />
+            <span id="imageLink-input-error" className="popup__input-error popup__input-error_active"></span>
         </PopupWithForm>
     )
 }

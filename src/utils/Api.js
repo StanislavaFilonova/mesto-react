@@ -1,7 +1,7 @@
 class Api {
-  constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
   // Возврат ответа об ошибке от сервера
   _checkResponse(res) {
@@ -9,7 +9,7 @@ class Api {
       // Метод .json принимает предоставленный JSON, строит его и отправляет его клиенту
       return res.json();
     }
-    //  Promise  позволяет создать обертку для значения, который еще не известен при создании промиса. Нужен дял асинхронных операций
+    // Promise  позволяет создать обертку для значения, который еще не известен при создании промиса. Нужен дял асинхронных операций
     return Promise.reject(`Ошибка: ${res.statusText}, с кодом: ${res.status}`);
   }
 
@@ -31,7 +31,6 @@ class Api {
       });
   }
 
-
   /**
    * Метод получения карточек с сервера 
    * @param {Function} callback принимает идентификатор пользователя и результат принятия 
@@ -39,17 +38,16 @@ class Api {
    */
   getCards(callback, errback) {
     return fetch(`${this._baseUrl}/cards`, {
-        headers: this._headers,
+      headers: this._headers,
+    })
+      .then(this._checkResponse)
+      .then((result) => {
+        callback(result);
       })
-        .then(this._checkResponse)
-        .then((result) => {
-          callback(result);
-        })
-        .catch((err) => {
-          errback(err);
-        });
+      .catch((err) => {
+        errback(err);
+      });
   }
-
 
   /**
    * Метод редактирования профиля пользователя
@@ -58,10 +56,9 @@ class Api {
    * userData.about {String}
    * @param {Function} callback 
    * @param {Function} errback 
-   * @returns 
+   * @param {Function} finalback
    */
   editProfile(userData, callback, errback, finalback) {
-
     if (!userData.name) {
       console.error("Api.editProfile в аргументе userData не передано обязательное поле 'name'. Запрос не будет выполнен.");
       return;
@@ -70,7 +67,6 @@ class Api {
       console.error("Api.editProfile в аргументе userData не передано обязательное поле 'about'. Запрос не будет выполнен.");
       return;
     }
-
     const url = `${this._baseUrl}/users/me`;
     const hdr = this._headers;
     hdr['Content-Type'] = 'application/json';
@@ -89,11 +85,8 @@ class Api {
       .catch((err) => {
         errback(err);
       })
-      .finally(() => {
-        finalback("Сохранить");
-      });
+      .finally(finalback);
   }
-
 
   /**
    * Метод загрузки новой карточки на сервер
@@ -102,9 +95,9 @@ class Api {
    * cardData.link {String}
    * @param {Function} callback 
    * @param {Function} errback 
+   * @param {Function} finalback
    */
   addCard(cardData, callback, errback, finalback) {
-
     if(!cardData.name) {
       console.error("Api.addCard в аргументе cardData не передано обязательное поле 'name'. Запрос не будет выполнен.");
       return;
@@ -132,25 +125,21 @@ class Api {
       .catch((err) => {
         errback(err);
       })
-      .finally(() => {
-        finalback("Создать");
-      });
+      .finally(finalback);
   }
-
 
   /**
    * Метод удаления карточки 
    * @param {String} cardId Индентификатор карточки 
    * @param {Function} callback 
    * @param {Function} errback 
+   * @param {Function} finalback
    */
-  deleteCard(cardId, callback, errback) {
-    
+  deleteCard(cardId, callback, errback, finalback) {
     if(!cardId) {
       console.error("Api.deleteCard не передан обязательный аргумент cardId. Запрос не будет выполнен.");
       return;
     }
-
     const url = `${this._baseUrl}/cards/${cardId}`;
     const hdr = this._headers;
     hdr['Content-Type'] = 'application/json';
@@ -166,26 +155,25 @@ class Api {
       })
       .catch((err) => {
         errback(err);
-      });
+      })
+      .finally(finalback);
   }
 
-
   /**
-   * Метод постановки лайка на карточку
+   * Метод постановки/удаления лайка на карточку
    * @param {String} cardId Идентификатор карточки 
    * @param {Function} callback 
    * @param {Function} errback 
    */
-  putLike(cardId, callback, errback){
-
+  changeLike(cardId, like, callback, errback){
     if(!cardId) {
-      console.error("Api.putLike не передан обязательный аргумент cardId. Запрос не будет выполнен.");
+      console.error("Api.changeLike не передан обязательный аргумент cardId. Запрос не будет выполнен.");
       return;
     }
 
     const url = `${this._baseUrl}/cards/likes/${cardId}`;
     const opts = {
-      method: 'PUT',
+      method: (like ? 'PUT' : 'DELETE'),
       headers: this._headers
     };
 
@@ -198,46 +186,15 @@ class Api {
         errback(err);
       });
   }
-
-
-  /**
-   * Метод удаления лайка с карточки 
-   * @param {String} cardId Идентификатор карточки
-   * @param {Function} callback 
-   * @param {Function} errback 
-   */
-  deleteLike(cardId, callback, errback) {
-
-    if(!cardId) {
-      console.error("Api.deleteLike не передан обязательный аргумент cardId. Запрос не будет выполнен.");
-      return;
-    }
-
-    const url = `${this._baseUrl}/cards/likes/${cardId}`;
-    const opts = {
-      method: 'DELETE',
-      headers: this._headers
-    };
-
-    return fetch(url, opts)
-      .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-     });
-  }
-
 
   /**
    * Метод обновления аватара
    * @param {String} avatarLink 
    * @param {Function} callback 
    * @param {Function} errback 
+   * @param {Function} finalback
    */
   renewAvatar(avatarLink, callback, errback, finalback) {
-    
     if(!avatarLink) {
       console.error("Api.renewAvatar не передан обязательный аргумент avatarLink. Запрос не будет выполнен.");
       return;
@@ -266,10 +223,12 @@ class Api {
   }
 }
 
+
 const api = new Api({
   baseUrl: "https://mesto.nomoreparties.co/v1/cohort-30",
   headers: {
     authorization: "08bc75e7-78fb-46ea-8791-989ceb63ff7a",
+    'Content-Type': 'application/json'
   },
 });
 
