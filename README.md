@@ -42,4 +42,4 @@ React
 
 ### Ссылка на проект
 
-<https://stanislavafilonova.github.io/mesto-react/index.html>
+<https://stanislavafilonova.github.io/mesto-react/>
