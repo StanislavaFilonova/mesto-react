@@ -133,7 +133,7 @@ function App() {
     const isLiked = card.likes.some(like => like._id === currentUser._id);
     api.changeLike(card._id, !isLiked, 
       (res) => {
-        console.log("Результат выполнения changeLike");
+        // console.log("Результат выполнения changeLike");
         console.log(res);
         setCards((condition) => condition.map((currentCard) => currentCard._id === card._id ? res : currentCard));
       },
@@ -150,7 +150,7 @@ function App() {
     const newCards = cards.filter((currentCard) => currentCard._id !== card._id);
     api.deleteCard(card._id, 
       (res) => {
-        console.log("Результат выполнения deleteCard");
+        // console.log("Результат выполнения deleteCard");
         console.log(res);
         // Обновляем состояние 
         setCards(newCards);
@@ -171,7 +171,7 @@ function App() {
     setProfilePopupButtonText('Сохранение...');
     api.editProfile(user, 
       (res) => {
-        console.log("Результат выполнения editProfile");
+        // console.log("Результат выполнения editProfile");
         console.log(res);
         setCurrentUser(res);
         closeAllPopups();
@@ -190,7 +190,7 @@ function App() {
     setAvatarPopupButtonText('Сохранение...');
     api.renewAvatar(avatar, // 1й аргумент с типом String (avatarLink в Api.js:renewAvatar)
       (res) => {            // 2й аргумент с типом Function (callback)
-        console.log("Результат выполнения renewAvatar");
+        // console.log("Результат выполнения renewAvatar");
         console.log(res);
         setCurrentUser(res);
         closeAllPopups();
@@ -210,7 +210,7 @@ function App() {
     setPlacePopupButtonText('Добавление...');
     api.addCard(cardNew, 
       (res) => {
-        console.log("Результат выполнения addCard");
+        // console.log("Результат выполнения addCard");
         console.log(res);
         setCards([res, ...cards]);
         closeAllPopups();
