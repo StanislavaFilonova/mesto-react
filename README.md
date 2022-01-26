@@ -4,7 +4,7 @@
 
 ## Проект № 10
 
-Выполнен частичный перенос интерфейса сервиса "Mesto" (<https://stanislavafilonova.github.io/mesto/>) на React:
+Выполнен частичный перенос интерфейса сервиса "Mesto" <https://stanislavafilonova.github.io/mesto/> на React:
 
 * Выполнен перенос разметки. Разметка страницы создается с ипользованием JSX;
 * Реализовано чтение данных с сервера и вывод на экран.
@@ -42,4 +42,4 @@ React
 
 ### Ссылка на проект
 
-<https://stanislavafilonova.github.io/mesto-react/index.html>
+<https://stanislavafilonova.github.io/mesto-react/>
