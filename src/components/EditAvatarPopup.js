@@ -1,22 +1,23 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
 //---------------------------------------------------------------------------------------------------------------------
 
 function EditAvatarPopup(props) {
     const inputRef = React.useRef(); // позволяет сохранить некоторый объект, который можно можно изменять и который хранится в течение всей жизни компонента.
+
     function handleSubmit(evt) {
         evt.preventDefault();
         props.onUpdateAvatar(inputRef.current.value);
-    };
+    }
 
-    React.useEffect(() =>{
-        inputRef.current.value = '';
-    },[props.isOpen]);
+    React.useEffect(() => {
+        inputRef.current.value = "";
+    }, [props.isOpen]);
 
     //---------------------------------------------------------------------------------------------------------------------
-    
-    return(
+
+    return (
         <PopupWithForm
             name="avatar"
             button="avatar"

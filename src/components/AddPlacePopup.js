@@ -1,11 +1,11 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
 //---------------------------------------------------------------------------------------------------------------------
 
 function AddPlacePopup(props) {
-    const [cardName, setCardName] = React.useState('');
-    const [cardLink, setCardLink] = React.useState('');
+    const [cardName, setCardName] = React.useState("");
+    const [cardLink, setCardLink] = React.useState("");
 
     function handleChangeCardName(evt) {
         setCardName(evt.target.value);
@@ -18,9 +18,9 @@ function AddPlacePopup(props) {
     function handleSubmit(evt) {
         evt.preventDefault();
 
-        props.onAddPlace ({
+        props.onAddPlace({
             name: cardName,
-            link: cardLink
+            link: cardLink,
         });
     }
 
@@ -28,12 +28,12 @@ function AddPlacePopup(props) {
 
     // Используем хук эффект, ктр. вызывает функцию
     React.useEffect(() => {
-        setCardName('');
-        setCardLink('');
+        setCardName("");
+        setCardLink("");
     }, [props.isOpen]);
 
     //---------------------------------------------------------------------------------------------------------------------
-    return(
+    return (
         <PopupWithForm
             name="card"
             title="Новое место"
@@ -43,11 +43,11 @@ function AddPlacePopup(props) {
             onClose={props.onClose}
             onSubmit={handleSubmit}
         >
-            <input 
-                type="text" 
+            <input
+                type="text"
                 className="popup__input popup__input_type_placename"
                 id="placename-input"
-                name="name" 
+                name="name"
                 required
                 minLength="2"
                 maxLength="30"
@@ -56,21 +56,27 @@ function AddPlacePopup(props) {
                 value={cardName}
                 onChange={handleChangeCardName}
             />
-            <span id="placename-input-error" className="popup__input-error popup__input-error_active"></span> 
-            <input 
-                type="url" 
+            <span
+                id="placename-input-error"
+                className="popup__input-error popup__input-error_active"
+            ></span>
+            <input
+                type="url"
                 className="popup__input popup__input_type_imagelink"
                 id="imageLink-input"
-                name="link" 
+                name="link"
                 required
                 autoComplete="off"
                 placeholder="Ссылка на картинку"
                 value={cardLink}
                 onChange={handleChangeCardLink}
             />
-            <span id="imageLink-input-error" className="popup__input-error popup__input-error_active"></span>
+            <span
+                id="imageLink-input-error"
+                className="popup__input-error popup__input-error_active"
+            ></span>
         </PopupWithForm>
-    )
+    );
 }
 
 export default AddPlacePopup;
