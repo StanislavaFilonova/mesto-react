@@ -14,12 +14,12 @@ import EditProfilePopup from "./EditProfilePopup.js";
 
 function App() {
     //Создаем хуки, управляющие внутренним состоянием.
-    const [isEditAvatarPopupOpen, onEditAvatarPopupOpen] =
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
         React.useState(false);
-    const [isEditProfilePopupOpen, onEditProfilePopupOpen] =
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
         React.useState(false);
-    const [isAddPlacePopupOpen, onAddPlacePopupOpen] = React.useState(false);
-    const [isDeleteCardPopup, onDeleteCardPopup] = React.useState(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    const [isDeleteCardPopup, setIsDeleteCardPopup] = React.useState(false);
 
     const [selectedCard, setSelectedCard] = React.useState({
         link: "",
@@ -43,15 +43,15 @@ function App() {
 
     //Создание обработчика события, который изменяет внутренне состояние
     function handleEditAvatarClick() {
-        onEditAvatarPopupOpen(true);
+        setIsEditAvatarPopupOpen(true);
     }
 
     function handleEditProfileClick() {
-        onEditProfilePopupOpen(true);
+        setIsEditProfilePopupOpen(true);
     }
 
     function handleAddPlaceClick() {
-        onAddPlacePopupOpen(true);
+        setIsAddPlacePopupOpen(true);
     }
 
     function handleCardClick(card) {
@@ -59,16 +59,16 @@ function App() {
     }
 
     function handleCardDeleteClick(card) {
-        onDeleteCardPopup(true);
+        setIsDeleteCardPopup(true);
         setCardDelete(card);
     }
 
     //Функция закрытия всех попапов
     function closeAllPopups() {
-        onEditAvatarPopupOpen(false);
-        onEditProfilePopupOpen(false);
-        onAddPlacePopupOpen(false);
-        onDeleteCardPopup(false);
+        setIsEditAvatarPopupOpen(false);
+        setIsEditProfilePopupOpen(false);
+        setIsAddPlacePopupOpen(false);
+        setIsDeleteCardPopup(false);
         setCardDelete({ link: "", name: "" });
         setSelectedCard({ link: "", name: "" });
     }
@@ -110,35 +110,27 @@ function App() {
 
     // Чтение данных с сервера (информация о пользователе)
     React.useEffect(() => {
-        api.getUserInfo(
-            // Функция колбэк получает информацию о пользователе в виде объекта
-            // Объект содержит свойства: name, about, avatar, _id.
-            (user) => {
+        api.getUserInfo()
+            .then((user) => {
                 //console.log(user);
                 setCurrentUser(user);
-            },
-            (err) => {
-                console.log(
-                    "В ходе получения информации о пользователе возникла ошибка."
-                );
+            })
+            .catch((err) => {
                 console.log(err);
-            }
-        );
+            })
     }, []);
 
     React.useEffect(() => {
         // После получения идентификатора пользователя получим карточки
-        api.getCards(
+        api.getCards()
             // После получения карточек - нарисуем их
-            (cards) => {
+            .then((cards) => {
                 //console.log(cards);
                 setCards(cards);
-            },
-            (err) => {
-                console.log("В ходе получения карточек возникла ошибка.");
+            })
+            .catch((err) => {
                 console.log(err);
-            }
-        );
+            })
     }, []);
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -146,91 +138,69 @@ function App() {
     function handleCardLike(card) {
         // Ввод переменной, где мы проверяем при помощи метода some, удовлетворяет ли какой-либо элемент массива условию, заданному в передаваемой функции.
         const isLiked = card.likes.some((like) => like._id === currentUser._id);
-        api.changeLike(
-            card._id,
-            !isLiked,
-            (res) => {
-                // console.log("Результат выполнения changeLike");
-                console.log(res);
+        api.changeLike(card._id, !isLiked)
+            .then((res) => {
                 setCards((condition) =>
                     condition.map((currentCard) =>
                         currentCard._id === card._id ? res : currentCard
                     )
                 );
-            },
-            (err) => {
-                console.log("Ошибка в результате выполнения changeLike");
+            })
+            .catch((err) => {
                 console.log(err);
-            }
-        );
+            })
     }
 
     //  Функция удаления карточки: устанавливаем текст на кнопку при удалении карточки
     function handleCardDelete(card) {
         setRemovePopupButtonText("Удаление...");
         // Исключаем из массива удаленную карточку
-        const newCards = cards.filter(
-            (currentCard) => currentCard._id !== card._id
-        );
-        api.deleteCard(
-            card._id,
-            (res) => {
-                // console.log("Результат выполнения deleteCard");
-                console.log(res);
+ 
+        api.deleteCard(card._id)
+            .then(() => {
+                const newCards = cards.filter(
+                    (currentCard) => currentCard._id !== card._id
+                );
                 // Обновляем состояние
                 setCards(newCards);
                 closeAllPopups();
-            },
-            (err) => {
-                console.log("Ошибка в результате выполнения deleteCard");
+            })
+            .catch((err) => {
                 console.log(err);
-            },
-            () => {
+            })
+            .finally(() => {
                 setRemovePopupButtonText("Да");
-            }
-        );
+            })
     }
 
     // Функция обновления пользователя
     function handleUpdateUser(user) {
         setProfilePopupButtonText("Сохранение...");
-        api.editProfile(
-            user,
-            (res) => {
-                // console.log("Результат выполнения editProfile");
-                console.log(res);
+        api.editProfile(user)
+            .then((res) => {
                 setCurrentUser(res);
                 closeAllPopups();
-            },
-            (err) => {
-                console.log("Ошибка в результате выполнения editProfile");
+            })
+            .catch((err) => {
                 console.log(err);
-            },
-            () => {
+            })
+            .finally(() => {
                 setProfilePopupButtonText("Сохранить");
-            }
-        );
+            })
     }
 
     // Функция обновления аватара
     function handleUpdateAvatar(avatar) {
         setAvatarPopupButtonText("Сохранение...");
-        api.renewAvatar(
-            avatar, // 1й аргумент с типом String (avatarLink в Api.js:renewAvatar)
-            (res) => {
-                // 2й аргумент с типом Function (callback)
-                // console.log("Результат выполнения renewAvatar");
-                console.log(res);
-                setCurrentUser(res);
+        api.renewAvatar(avatar) // 1й аргумент с типом String (avatarLink в Api.js:renewAvatar)
+            .then((avatar) => {
+                setCurrentUser(avatar);
                 closeAllPopups();
-            },
-            (err) => {
-                // 3й аргумент с типом Function (errback)
-                console.log("Ошибка в результате выполнения renewAvatar");
+            })
+            .catch((err) => {
                 console.log(err);
-            },
-            () => {
-                // 4й аргумент с типом Function (finalback)
+            })
+            .finally(() => {
                 setAvatarPopupButtonText("Сохранить");
             }
         );
@@ -239,22 +209,17 @@ function App() {
     // Функция добавления места
     function handleAddPlaceSubmit(cardNew) {
         setPlacePopupButtonText("Добавление...");
-        api.addCard(
-            cardNew,
-            (res) => {
-                // console.log("Результат выполнения addCard");
-                console.log(res);
+        api.addCard(cardNew)
+            .then((res) => {
                 setCards([res, ...cards]);
                 closeAllPopups();
-            },
-            (err) => {
-                console.log("Ошибка в результате выполнения addCard");
+            })
+            .catch((err) => {
                 console.log(err);
-            },
-            () => {
+            })
+            .finally(() => {
                 setPlacePopupButtonText("Создать");
-            }
-        );
+            })
     }
 
     //---------------------------------------------------------------------------------------------------------------------

@@ -15,38 +15,22 @@ class Api {
 
   /**
    * Метод получения информации о пользователе с сервера 
-   * @param {Function} callback Функция обработки успешного ответа от сервера, получает информацию о пользователе  
-   * @param {Function} errback Функция обработки ошибки от сервера
    */
-  getUserInfo(callback, errback) {
+  getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
     })
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      });
   }
 
   /**
    * Метод получения карточек с сервера 
-   * @param {Function} callback принимает идентификатор пользователя и результат принятия 
-   * @param {Function} errback 
    */
-  getCards(callback, errback) {
+  getCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
     })
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      });
   }
 
   /**
@@ -54,11 +38,8 @@ class Api {
    * @param {Object} userData Данные о пользователе
    * userData.name {String} 
    * userData.about {String}
-   * @param {Function} callback 
-   * @param {Function} errback 
-   * @param {Function} finalback
    */
-  editProfile(userData, callback, errback, finalback) {
+  editProfile(userData) {
     if (!userData.name) {
       console.error("Api.editProfile в аргументе userData не передано обязательное поле 'name'. Запрос не будет выполнен.");
       return;
@@ -79,13 +60,6 @@ class Api {
 
     return fetch(url, opts)
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      })
-      .finally(finalback);
   }
 
   /**
@@ -93,11 +67,8 @@ class Api {
    * @param {Object} cardData Данные о карточке
    * cardData.name {String}
    * cardData.link {String}
-   * @param {Function} callback 
-   * @param {Function} errback 
-   * @param {Function} finalback
    */
-  addCard(cardData, callback, errback, finalback) {
+  addCard(cardData) {
     if(!cardData.name) {
       console.error("Api.addCard в аргументе cardData не передано обязательное поле 'name'. Запрос не будет выполнен.");
       return;
@@ -119,23 +90,13 @@ class Api {
 
     return fetch(url, opts)
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      })
-      .finally(finalback);
   }
 
   /**
    * Метод удаления карточки 
    * @param {String} cardId Индентификатор карточки 
-   * @param {Function} callback 
-   * @param {Function} errback 
-   * @param {Function} finalback
    */
-  deleteCard(cardId, callback, errback, finalback) {
+  deleteCard(cardId) {
     if(!cardId) {
       console.error("Api.deleteCard не передан обязательный аргумент cardId. Запрос не будет выполнен.");
       return;
@@ -150,22 +111,13 @@ class Api {
 
     return fetch(url, opts)
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      })
-      .finally(finalback);
   }
 
   /**
    * Метод постановки/удаления лайка на карточку
    * @param {String} cardId Идентификатор карточки 
-   * @param {Function} callback 
-   * @param {Function} errback 
    */
-  changeLike(cardId, like, callback, errback){
+  changeLike(cardId, like){
     if(!cardId) {
       console.error("Api.changeLike не передан обязательный аргумент cardId. Запрос не будет выполнен.");
       return;
@@ -179,12 +131,6 @@ class Api {
 
     return fetch(url, opts)
       .then(this._checkResponse)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((err) => {
-        errback(err);
-      });
   }
 
   /**
@@ -194,7 +140,7 @@ class Api {
    * @param {Function} errback 
    * @param {Function} finalback
    */
-  renewAvatar(avatarLink, callback, errback, finalback) {
+  renewAvatar(avatarLink) {
     if(!avatarLink) {
       console.error("Api.renewAvatar не передан обязательный аргумент avatarLink. Запрос не будет выполнен.");
       return;
@@ -213,13 +159,6 @@ class Api {
 
     return fetch(url, opts)
     .then(this._checkResponse)
-    .then((result) => {
-      callback(result);
-    })
-    .catch((err) => {
-      errback(err);
-    })
-    .finally(finalback);
   }
 }
 

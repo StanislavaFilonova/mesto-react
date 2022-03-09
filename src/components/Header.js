@@ -1,5 +1,5 @@
 // Импортируем изображение, чтобы оно отображалось на страничке
-import Vector from '../images/Vector.svg';
+import vector from '../images/vector.svg';
 
 /**
  *  Функция: Создание компонента Header, который отвечает за прорисовку логотипа на сайте
@@ -7,7 +7,7 @@ import Vector from '../images/Vector.svg';
 function Header() {
     return (
         <header className="header">
-            <img src={Vector} alt="Логотип сервиса" className="header__logo"/>
+            <img src={vector} alt="Логотип сервиса" className="header__logo"/>
         </header>
     );
 }
